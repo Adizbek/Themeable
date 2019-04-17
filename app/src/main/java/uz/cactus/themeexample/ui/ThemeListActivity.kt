@@ -1,4 +1,4 @@
-package uz.cactus.themeexample.theme
+package uz.cactus.themeexample.ui
 
 import android.content.Context
 import android.os.Build
@@ -11,6 +11,9 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import github.adizbek.themeable.Theme
+import github.adizbek.themeable.ThemeBinder
+import github.adizbek.themeable.ThemeListener
 import kotlinx.android.synthetic.main.activity_theme_list.*
 import uz.cactus.themeexample.R
 import uz.cactus.themeexample.toast
@@ -21,10 +24,22 @@ class ThemeListActivity : AppCompatActivity(), ThemeListener {
 
     override fun bindStyles(): Array<ThemeBinder> {
         return arrayOf(
-            ThemeBinder(toolbar, ThemeBinder.Flag.COLOR, Theme.KEY_ACTION_BAR_TITLE_COLOR),
-            ThemeBinder(toolbar, ThemeBinder.Flag.BACKGROUND_COLOR, Theme.KEY_ACTION_BAR_BACKGROUND_COLOR),
+            ThemeBinder(
+                toolbar,
+                ThemeBinder.Flag.COLOR,
+                Theme.KEY_ACTION_BAR_TITLE_COLOR
+            ),
+            ThemeBinder(
+                toolbar,
+                ThemeBinder.Flag.BACKGROUND_COLOR,
+                Theme.KEY_ACTION_BAR_BACKGROUND_COLOR
+            ),
 
-            ThemeBinder(null, null, Theme.KEY_STATUS_BAR_COLOR) { color ->
+            ThemeBinder(
+                null,
+                null,
+                Theme.KEY_STATUS_BAR_COLOR
+            ) { color ->
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     window.statusBarColor = color
                 }
@@ -33,13 +48,13 @@ class ThemeListActivity : AppCompatActivity(), ThemeListener {
     }
 
     override fun onPause() {
-        ThemeManager.registerListener(this)
+        github.adizbek.themeable.ThemeManager.registerListener(this)
 
         super.onPause()
     }
 
     override fun onResume() {
-        ThemeManager.registerListener(this)
+        github.adizbek.themeable.ThemeManager.registerListener(this)
 
         super.onResume()
     }
@@ -77,7 +92,7 @@ class ThemeListActivity : AppCompatActivity(), ThemeListener {
 
         setupThemesList()
 
-        ThemeManager.applyStyles(this)
+        github.adizbek.themeable.ThemeManager.applyStyles(this)
     }
 
     fun setupThemesList() {
@@ -85,13 +100,13 @@ class ThemeListActivity : AppCompatActivity(), ThemeListener {
             this,
             R.layout.list_item_theme_style,
             R.id.key,
-            ThemeManager.themes
+            github.adizbek.themeable.ThemeManager.themes
         )
 
         list.setOnItemClickListener { parent, view, position, id ->
             val theme = parent.adapter.getItem(position) as Theme
 
-            ThemeManager.applyTheme(theme, this)
+            github.adizbek.themeable.ThemeManager.applyTheme(theme, this)
         }
     }
 

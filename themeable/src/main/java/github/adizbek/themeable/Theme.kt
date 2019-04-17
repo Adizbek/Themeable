@@ -1,10 +1,10 @@
-package uz.cactus.themeexample.theme
+package github.adizbek.themeable
 
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.Drawable
-import uz.cactus.themeexample.R
+import java.util.*
 
 
 class Theme(name: String) {
@@ -114,7 +114,6 @@ object Drawables : ThemeListener {
         ThemeManager.registerListener(this)
         ThemeManager.applyStyles(this)
     }
-
 }
 
 fun Int.toPx(): Float = (this * Resources.getSystem().displayMetrics.density)

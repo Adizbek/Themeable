@@ -1,4 +1,4 @@
-package uz.cactus.themeexample.theme
+package github.adizbek.themeable
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -129,10 +129,26 @@ class ThemeManager {
         }
 
         private fun loadPredefinedThemes() {
-            themes.add(create("Default"))
-            themes.add(create("Rocket"))
-            themes.add(create("IOS"))
-            themes.add(create("Telegram"))
+            themes.add(
+                create(
+                    "Default"
+                )
+            )
+            themes.add(
+                create(
+                    "Rocket"
+                )
+            )
+            themes.add(
+                create(
+                    "IOS"
+                )
+            )
+            themes.add(
+                create(
+                    "Telegram"
+                )
+            )
         }
 
         private fun loadUserCreatedThemes() {

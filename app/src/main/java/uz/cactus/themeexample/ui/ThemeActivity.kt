@@ -1,4 +1,4 @@
-package uz.cactus.themeexample.theme
+package uz.cactus.themeexample.ui
 
 import android.content.Intent
 import android.os.Build
@@ -13,16 +13,32 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
+import github.adizbek.themeable.Theme
+import github.adizbek.themeable.ThemeBinder
+import github.adizbek.themeable.ThemeListener
 import kotlinx.android.synthetic.main.activity_theme.*
+import uz.cactus.themeexample.R
 import uz.cactus.themeexample.toast
 
 
 class ThemeActivity : AppCompatActivity(), ThemeListener {
     override fun bindStyles(): Array<ThemeBinder> {
         return arrayOf(
-            ThemeBinder(toolbar, ThemeBinder.Flag.COLOR, Theme.KEY_ACTION_BAR_TITLE_COLOR),
-            ThemeBinder(toolbar, ThemeBinder.Flag.BACKGROUND_COLOR, Theme.KEY_ACTION_BAR_BACKGROUND_COLOR),
-            ThemeBinder(null, null, Theme.KEY_STATUS_BAR_COLOR) { color ->
+            ThemeBinder(
+                toolbar,
+                ThemeBinder.Flag.COLOR,
+                Theme.KEY_ACTION_BAR_TITLE_COLOR
+            ),
+            ThemeBinder(
+                toolbar,
+                ThemeBinder.Flag.BACKGROUND_COLOR,
+                Theme.KEY_ACTION_BAR_BACKGROUND_COLOR
+            ),
+            ThemeBinder(
+                null,
+                null,
+                Theme.KEY_STATUS_BAR_COLOR
+            ) { color ->
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     window.statusBarColor = color
                 }
@@ -30,14 +46,14 @@ class ThemeActivity : AppCompatActivity(), ThemeListener {
         )
     }
 
-    var theme = ThemeManager.getCurrentTheme()
+    var theme = github.adizbek.themeable.ThemeManager.getCurrentTheme()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(uz.cactus.themeexample.R.layout.activity_theme)
         setSupportActionBar(toolbar)
 
-        ThemeManager.applyStyles(this)
+        github.adizbek.themeable.ThemeManager.applyStyles(this)
 
         loadStyles()
     }
@@ -57,7 +73,7 @@ class ThemeActivity : AppCompatActivity(), ThemeListener {
             }
 
             uz.cactus.themeexample.R.id.menu_action_save_theme -> {
-                ThemeManager.saveCurrent()
+                github.adizbek.themeable.ThemeManager.saveCurrent()
                 toast(this, "Theme saved")
             }
         }
@@ -73,8 +89,8 @@ class ThemeActivity : AppCompatActivity(), ThemeListener {
     private fun loadStyles() {
         list.adapter = ThemeStyleAdapter(
             this,
-            uz.cactus.themeexample.R.layout.list_item_theme_style,
-            uz.cactus.themeexample.R.id.key,
+            R.layout.list_item_theme_style,
+            R.id.key,
             theme
         )
 
@@ -84,20 +100,20 @@ class ThemeActivity : AppCompatActivity(), ThemeListener {
             showColorPicker(key) { color ->
                 view.findViewById<ImageView>(uz.cactus.themeexample.R.id.color).setBackgroundColor(color)
 
-                ThemeManager.setStyle(key, color)
+                github.adizbek.themeable.ThemeManager.setStyle(key, color)
             }
         }
     }
 
 
     override fun onNewThemeApplied() {
-        theme = ThemeManager.getCurrentTheme()
+        theme = github.adizbek.themeable.ThemeManager.getCurrentTheme()
 
         loadStyles()
     }
 
     private fun showColorPicker(forKey: String, callback: (color: Int) -> Unit) {
-        val oldColor = ThemeManager.getStyle(forKey)
+        val oldColor = github.adizbek.themeable.ThemeManager.getStyle(forKey)
 
         ColorPickerDialog.Builder(this)
             .setPreferenceName(null)
@@ -124,13 +140,13 @@ class ThemeActivity : AppCompatActivity(), ThemeListener {
     }
 
     override fun onPause() {
-        ThemeManager.registerListener(this)
+        github.adizbek.themeable.ThemeManager.registerListener(this)
 
         super.onPause()
     }
 
     override fun onResume() {
-        ThemeManager.registerListener(this)
+        github.adizbek.themeable.ThemeManager.registerListener(this)
 
         super.onResume()
     }

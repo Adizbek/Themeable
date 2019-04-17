@@ -1,4 +1,4 @@
-package uz.cactus.themeexample.theme
+package github.adizbek.themeable
 
 import android.graphics.Paint
 import android.graphics.PorterDuff
@@ -16,6 +16,16 @@ class ThemeBinder(var view: View?, var flag: Flag?, var drawable: Drawable?, var
     constructor(view: View?, flag: Flag?, key: String, delegate: (color: Int) -> Unit) : this(
         view,
         flag,
+        null,
+        null,
+        key
+    ) {
+        this.delegate = delegate
+    }
+
+    constructor(key: String, delegate: (color: Int) -> Unit) : this(
+        null,
+        null,
         null,
         null,
         key
@@ -55,7 +65,7 @@ class ThemeBinder(var view: View?, var flag: Flag?, var drawable: Drawable?, var
 
                         // TODO check later.
                         for (child in menu.children) {
-                            child.icon?.apply {
+                            child.icon.apply {
                                 setColorFilter(color, PorterDuff.Mode.MULTIPLY)
                                 invalidate()
                             }

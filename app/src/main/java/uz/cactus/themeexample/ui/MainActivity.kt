@@ -1,4 +1,4 @@
-package uz.cactus.themeexample
+package uz.cactus.themeexample.ui
 
 import android.content.Intent
 import android.os.Build
@@ -12,17 +12,36 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import github.adizbek.themeable.Drawables
+import github.adizbek.themeable.Theme
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import uz.cactus.themeexample.theme.*
+import uz.cactus.themeexample.R
 
-class MainActivity : AppCompatActivity(), ThemeListener {
-    override fun bindStyles(): Array<ThemeBinder> {
+class MainActivity : AppCompatActivity(), github.adizbek.themeable.ThemeListener {
+    override fun bindStyles(): Array<github.adizbek.themeable.ThemeBinder> {
         return arrayOf(
-            ThemeBinder(toolbar, ThemeBinder.Flag.COLOR, Theme.KEY_ACTION_BAR_TITLE_COLOR),
-            ThemeBinder(toolbar, ThemeBinder.Flag.BACKGROUND_COLOR, Theme.KEY_ACTION_BAR_BACKGROUND_COLOR),
-            ThemeBinder(list, ThemeBinder.Flag.BACKGROUND_COLOR, Theme.KEY_DIALOG_LIST_BACKGROUND),
-            ThemeBinder(null, null, Theme.KEY_STATUS_BAR_COLOR) { color ->
+            github.adizbek.themeable.ThemeBinder(
+                toolbar,
+                github.adizbek.themeable.ThemeBinder.Flag.COLOR,
+                Theme.KEY_ACTION_BAR_TITLE_COLOR
+            ),
+            github.adizbek.themeable.ThemeBinder(
+                toolbar,
+                github.adizbek.themeable.ThemeBinder.Flag.BACKGROUND_COLOR,
+                Theme.KEY_ACTION_BAR_BACKGROUND_COLOR
+            ),
+            github.adizbek.themeable.ThemeBinder(
+                list,
+                github.adizbek.themeable.ThemeBinder.Flag.BACKGROUND_COLOR,
+                Theme.KEY_DIALOG_LIST_BACKGROUND
+            ),
+            github.adizbek.themeable.ThemeBinder(
+                fab,
+                github.adizbek.themeable.ThemeBinder.Flag.BACKGROUND_COLOR,
+                Theme.KEY_STATUS_BAR_COLOR
+            ),
+            github.adizbek.themeable.ThemeBinder(Theme.KEY_STATUS_BAR_COLOR) { color ->
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     window.statusBarColor = color
                 }
@@ -37,7 +56,7 @@ class MainActivity : AppCompatActivity(), ThemeListener {
 
         setupList(list)
 
-        ThemeManager.applyStyles(this)
+        github.adizbek.themeable.ThemeManager.applyStyles(this)
 
         fab.setOnClickListener { view ->
             startActivity(Intent(this, ThemeActivity::class.java))
@@ -83,13 +102,13 @@ class MainActivity : AppCompatActivity(), ThemeListener {
 
 
     override fun onPause() {
-        ThemeManager.registerListener(this)
+        github.adizbek.themeable.ThemeManager.registerListener(this)
 
         super.onPause()
     }
 
     override fun onResume() {
-        ThemeManager.registerListener(this)
+        github.adizbek.themeable.ThemeManager.registerListener(this)
 
         super.onResume()
     }
@@ -136,11 +155,19 @@ class DialogAdapter(var data: ArrayList<String>) : RecyclerView.Adapter<DialogAd
 
     }
 
-    class VH(view: View) : RecyclerView.ViewHolder(view), ThemeListener {
-        override fun bindStyles(): Array<ThemeBinder> {
+    class VH(view: View) : RecyclerView.ViewHolder(view), github.adizbek.themeable.ThemeListener {
+        override fun bindStyles(): Array<github.adizbek.themeable.ThemeBinder> {
             return arrayOf(
-                ThemeBinder(name, ThemeBinder.Flag.COLOR, Theme.KEY_DIALOG_LIST_TITLE_COLOR),
-                ThemeBinder(text, ThemeBinder.Flag.COLOR, Theme.KEY_DIALOG_LIST_TEXT_COLOR)
+                github.adizbek.themeable.ThemeBinder(
+                    name,
+                    github.adizbek.themeable.ThemeBinder.Flag.COLOR,
+                    Theme.KEY_DIALOG_LIST_TITLE_COLOR
+                ),
+                github.adizbek.themeable.ThemeBinder(
+                    text,
+                    github.adizbek.themeable.ThemeBinder.Flag.COLOR,
+                    Theme.KEY_DIALOG_LIST_TEXT_COLOR
+                )
             )
         }
 
@@ -149,8 +176,8 @@ class DialogAdapter(var data: ArrayList<String>) : RecyclerView.Adapter<DialogAd
         val logo = view.findViewById<ImageView>(R.id.logo)
 
         init {
-            ThemeManager.registerListener(this)
-            ThemeManager.applyStyles(this)
+            github.adizbek.themeable.ThemeManager.registerListener(this)
+            github.adizbek.themeable.ThemeManager.applyStyles(this)
         }
     }
 
