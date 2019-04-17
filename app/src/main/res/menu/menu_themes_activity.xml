@@ -3,8 +3,16 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+            android:icon="@drawable/ic_save_white_24dp"
+            android:title="Save theme"
+            app:showAsAction="always"
+            android:id="@+id/menu_action_save_theme"/>
+
+    <item
             android:id="@+id/menu_action_select_theme"
             android:title="Styles"
             android:icon="@drawable/ic_style_white_24dp"
             app:showAsAction="always"/>
+
+
 </menu>

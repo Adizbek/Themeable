@@ -1,7 +1,6 @@
 package uz.cactus.themeexample.theme
 
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
@@ -11,25 +10,24 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import kotlinx.android.synthetic.main.activity_theme.*
-import uz.cactus.themeexample.R
+import uz.cactus.themeexample.toast
 
 
 class ThemeActivity : AppCompatActivity(), ThemeListener {
-    override fun onStyleChanged(key: String, color: Int) {
-        if (key == Theme.KEY_ACTION_BAR_BACKGROUND_COLOR) {
-            supportActionBar?.setBackgroundDrawable(ColorDrawable(color))
-        } else if (key == Theme.KEY_ACTION_BAR_TITLE_COLOR) {
-            toolbar.setTitleTextColor(color)
-        } else if (key == Theme.KEY_STATUS_BAR_COLOR) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                window.statusBarColor = color
+    override fun bindStyles(): Array<ThemeBinder> {
+        return arrayOf(
+            ThemeBinder(toolbar, ThemeBinder.Flag.COLOR, Theme.KEY_ACTION_BAR_TITLE_COLOR),
+            ThemeBinder(toolbar, ThemeBinder.Flag.BACKGROUND_COLOR, Theme.KEY_ACTION_BAR_BACKGROUND_COLOR),
+            ThemeBinder(null, null, Theme.KEY_STATUS_BAR_COLOR) { color ->
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    window.statusBarColor = color
+                }
             }
-        }
+        )
     }
 
     var theme = ThemeManager.getCurrentTheme()
@@ -39,18 +37,14 @@ class ThemeActivity : AppCompatActivity(), ThemeListener {
         setContentView(uz.cactus.themeexample.R.layout.activity_theme)
         setSupportActionBar(toolbar)
 
-        supportActionBar?.setBackgroundDrawable(ColorDrawable(ThemeManager.getStyle(Theme.KEY_ACTION_BAR_BACKGROUND_COLOR)))
-        toolbar.setTitleTextColor(ThemeManager.getStyle(Theme.KEY_ACTION_BAR_TITLE_COLOR))
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = ThemeManager.getStyle(Theme.KEY_STATUS_BAR_COLOR)
-        }
-
+        ThemeManager.applyStyles(this)
 
         loadStyles()
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_themes_activity, menu)
+        menuInflater.inflate(uz.cactus.themeexample.R.menu.menu_themes_activity, menu)
 
         return true
     }
@@ -58,8 +52,13 @@ class ThemeActivity : AppCompatActivity(), ThemeListener {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
 
         when (item?.itemId) {
-            R.id.menu_action_select_theme -> {
+            uz.cactus.themeexample.R.id.menu_action_select_theme -> {
                 showThemesList()
+            }
+
+            uz.cactus.themeexample.R.id.menu_action_save_theme -> {
+                ThemeManager.saveCurrent()
+                toast(this, "Theme saved")
             }
         }
 
@@ -83,19 +82,26 @@ class ThemeActivity : AppCompatActivity(), ThemeListener {
             val key = parent.getItemAtPosition(position) as String
 
             showColorPicker(key) { color ->
-                view.findViewById<ImageView>(R.id.color).setBackgroundColor(color)
+                view.findViewById<ImageView>(uz.cactus.themeexample.R.id.color).setBackgroundColor(color)
 
                 ThemeManager.setStyle(key, color)
             }
         }
     }
 
+
+    override fun onNewThemeApplied() {
+        theme = ThemeManager.getCurrentTheme()
+
+        loadStyles()
+    }
+
     private fun showColorPicker(forKey: String, callback: (color: Int) -> Unit) {
         val oldColor = ThemeManager.getStyle(forKey)
 
         ColorPickerDialog.Builder(this)
+            .setPreferenceName(null)
             .setTitle("ColorPicker Dialog")
-            .setPreferenceName("MyColorPickerDialog")
             .setPositiveButton("Pick",
                 ColorEnvelopeListener { envelope, fromUser ->
                     callback(envelope.color)
@@ -110,27 +116,23 @@ class ThemeActivity : AppCompatActivity(), ThemeListener {
                 colorPickerView.setColorListener(ColorEnvelopeListener { envelope, fromUser ->
                     callback(envelope.color)
                 })
+
+                colorPickerView.pureColor = oldColor
             }
             .show()
 
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        ThemeManager.registerListener(this)
-    }
-
     override fun onPause() {
-        ThemeManager.removeListener(this)
+        ThemeManager.registerListener(this)
 
         super.onPause()
     }
 
-    override fun onDestroy() {
-        ThemeManager.saveCurrent()
+    override fun onResume() {
+        ThemeManager.registerListener(this)
 
-        super.onDestroy()
+        super.onResume()
     }
 }
 

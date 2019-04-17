@@ -9,5 +9,12 @@
         tools:showIn="@layout/activity_main"
         tools:context=".MainActivity">
 
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list"
+            tools:listitem="@layout/list_item_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

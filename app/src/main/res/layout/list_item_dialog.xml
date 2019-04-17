@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:orientation="vertical"
+                tools:background="#e2e2e2"
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+    <ImageView
+            android:id="@+id/logo"
+            android:src="@drawable/ic_save_white_24dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"/>
+
+    <TextView
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/ic_account_circle_white_18dp"
+            android:id="@+id/name"
+            android:text="John Doe"
+            android:layout_toRightOf="@id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:id="@+id/text"
+            android:padding="5dp"
+            android:layout_below="@id/name"
+            android:layout_toRightOf="@id/logo"
+            android:text="John Doe: Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+</RelativeLayout>
