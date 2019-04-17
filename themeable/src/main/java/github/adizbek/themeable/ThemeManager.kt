@@ -2,6 +2,8 @@ package github.adizbek.themeable
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.skydoves.colorpickerview.ColorPickerDialog
+import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import java.io.File
 
 class ThemeManager<T : ThemeInterface>(
@@ -159,6 +161,32 @@ class ThemeManager<T : ThemeInterface>(
         context.getSettingsPreferences().edit().putString("selectedTheme", theme.fileName.toString()).apply()
 
         notifyListeners(theme)
+    }
+
+    fun provideColorPicker(forKey: String, context: Context, callback: (color: Int) -> Unit) {
+        val oldColor = this.getStyle(forKey)
+
+        ColorPickerDialog.Builder(context)
+            .setPreferenceName(null)
+            .setTitle("ColorPicker Dialog")
+            .setPositiveButton("Pick",
+                ColorEnvelopeListener { envelope, fromUser ->
+                    callback(envelope.color)
+                })
+            .setNegativeButton("Cancel") { dialog, _ ->
+                callback(oldColor)
+                dialog.dismiss()
+            }
+            .attachAlphaSlideBar(true)
+            .attachBrightnessSlideBar(true)
+            .apply {
+                colorPickerView.setColorListener(ColorEnvelopeListener { envelope, fromUser ->
+                    callback(envelope.color)
+                })
+
+                colorPickerView.pureColor = oldColor
+            }
+            .show()
     }
 }
 

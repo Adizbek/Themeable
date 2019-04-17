@@ -11,8 +11,6 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.skydoves.colorpickerview.ColorPickerDialog
-import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import github.adizbek.themeable.ThemeBinder
 import github.adizbek.themeable.ThemeListener
 import kotlinx.android.synthetic.main.activity_theme.*
@@ -114,30 +112,7 @@ class ThemeActivity : AppCompatActivity(), ThemeListener {
     }
 
     private fun showColorPicker(forKey: String, callback: (color: Int) -> Unit) {
-        val oldColor = ThemeApplication.themeManager.getStyle(forKey)
-
-        ColorPickerDialog.Builder(this)
-            .setPreferenceName(null)
-            .setTitle("ColorPicker Dialog")
-            .setPositiveButton("Pick",
-                ColorEnvelopeListener { envelope, fromUser ->
-                    callback(envelope.color)
-                })
-            .setNegativeButton("Cancel") { dialog, _ ->
-                callback(oldColor)
-                dialog.dismiss()
-            }
-            .attachAlphaSlideBar(true)
-            .attachBrightnessSlideBar(true)
-            .apply {
-                colorPickerView.setColorListener(ColorEnvelopeListener { envelope, fromUser ->
-                    callback(envelope.color)
-                })
-
-                colorPickerView.pureColor = oldColor
-            }
-            .show()
-
+        ThemeApplication.themeManager.provideColorPicker(forKey, this, callback)
     }
 
     override fun onPause() {
