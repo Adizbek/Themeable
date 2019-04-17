@@ -4,4 +4,4 @@
 
 
 ## Latets version on Jitpack
-[![](https://jitpack.io/v/Adizbek/AndroidStarter.svg)](https://jitpack.io/#Adizbek/AndroidStarter)
+[![](https://jitpack.io/v/Adizbek/Themeable.svg)](https://jitpack.io/#Adizbek/Themeable)
