@@ -11,11 +11,12 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import github.adizbek.themeable.Theme
 import github.adizbek.themeable.ThemeBinder
 import github.adizbek.themeable.ThemeListener
 import kotlinx.android.synthetic.main.activity_theme_list.*
 import uz.cactus.themeexample.R
+import uz.cactus.themeexample.ThemeApplication
+import uz.cactus.themeexample.theme.Theme
 import uz.cactus.themeexample.toast
 
 class ThemeListActivity : AppCompatActivity(), ThemeListener {
@@ -47,16 +48,16 @@ class ThemeListActivity : AppCompatActivity(), ThemeListener {
         )
     }
 
-    override fun onPause() {
-        github.adizbek.themeable.ThemeManager.registerListener(this)
-
-        super.onPause()
-    }
-
     override fun onResume() {
-        github.adizbek.themeable.ThemeManager.registerListener(this)
+        ThemeApplication.themeManager.registerListener(this)
 
         super.onResume()
+    }
+
+    override fun onPause() {
+        ThemeApplication.themeManager.removeListener(this)
+
+        super.onPause()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -92,7 +93,7 @@ class ThemeListActivity : AppCompatActivity(), ThemeListener {
 
         setupThemesList()
 
-        github.adizbek.themeable.ThemeManager.applyStyles(this)
+        ThemeApplication.themeManager.applyStyles(this)
     }
 
     fun setupThemesList() {
@@ -100,13 +101,13 @@ class ThemeListActivity : AppCompatActivity(), ThemeListener {
             this,
             R.layout.list_item_theme_style,
             R.id.key,
-            github.adizbek.themeable.ThemeManager.themes
+            ThemeApplication.themeManager.themes
         )
 
         list.setOnItemClickListener { parent, view, position, id ->
             val theme = parent.adapter.getItem(position) as Theme
 
-            github.adizbek.themeable.ThemeManager.applyTheme(theme, this)
+            ThemeApplication.themeManager.applyTheme(theme, this)
         }
     }
 
@@ -118,7 +119,7 @@ class ThemeListActivity : AppCompatActivity(), ThemeListener {
 
             val theme: Theme = getItem(position)!!
 
-            view.findViewById<TextView>(R.id.key).text = theme.name
+            view.findViewById<TextView>(R.id.key).text = theme.fileName
             view.findViewById<ImageView>(R.id.color)
                 .setBackgroundColor(theme.getStyle(Theme.KEY_ACTION_BAR_BACKGROUND_COLOR))
 

@@ -3,16 +3,28 @@ package uz.cactus.themeexample
 import android.app.Application
 import android.content.Context
 import android.widget.Toast
-import uz.cactus.themeexample.theme.Drawables
 import github.adizbek.themeable.ThemeManager
+import uz.cactus.themeexample.theme.Drawables
+import uz.cactus.themeexample.theme.Theme
 
 class ThemeApplication : Application() {
+
 
     override fun onCreate() {
         super.onCreate()
 
-        github.adizbek.themeable.ThemeManager.init(this)
-        Drawables.loadResources(this)
+        themeManager = ThemeManager(
+            this,
+            Theme::class.java,
+            fileExtension = "rchatheme"
+        )
+
+
+        Drawables.loadResources(themeManager, this)
+    }
+
+    companion object {
+        lateinit var themeManager: ThemeManager<Theme>
     }
 }
 

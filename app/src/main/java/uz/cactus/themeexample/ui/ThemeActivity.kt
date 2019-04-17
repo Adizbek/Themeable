@@ -13,11 +13,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
-import github.adizbek.themeable.Theme
 import github.adizbek.themeable.ThemeBinder
 import github.adizbek.themeable.ThemeListener
 import kotlinx.android.synthetic.main.activity_theme.*
 import uz.cactus.themeexample.R
+import uz.cactus.themeexample.ThemeApplication
+import uz.cactus.themeexample.theme.Theme
 import uz.cactus.themeexample.toast
 
 
@@ -46,14 +47,14 @@ class ThemeActivity : AppCompatActivity(), ThemeListener {
         )
     }
 
-    var theme = github.adizbek.themeable.ThemeManager.getCurrentTheme()
+    var theme = ThemeApplication.themeManager.getCurrentTheme()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(uz.cactus.themeexample.R.layout.activity_theme)
         setSupportActionBar(toolbar)
 
-        github.adizbek.themeable.ThemeManager.applyStyles(this)
+        ThemeApplication.themeManager.applyStyles(this)
 
         loadStyles()
     }
@@ -73,7 +74,7 @@ class ThemeActivity : AppCompatActivity(), ThemeListener {
             }
 
             uz.cactus.themeexample.R.id.menu_action_save_theme -> {
-                github.adizbek.themeable.ThemeManager.saveCurrent()
+                ThemeApplication.themeManager.saveCurrent()
                 toast(this, "Theme saved")
             }
         }
@@ -100,20 +101,20 @@ class ThemeActivity : AppCompatActivity(), ThemeListener {
             showColorPicker(key) { color ->
                 view.findViewById<ImageView>(uz.cactus.themeexample.R.id.color).setBackgroundColor(color)
 
-                github.adizbek.themeable.ThemeManager.setStyle(key, color)
+                ThemeApplication.themeManager.setStyle(key, color)
             }
         }
     }
 
 
     override fun onNewThemeApplied() {
-        theme = github.adizbek.themeable.ThemeManager.getCurrentTheme()
+        theme = ThemeApplication.themeManager.getCurrentTheme()
 
         loadStyles()
     }
 
     private fun showColorPicker(forKey: String, callback: (color: Int) -> Unit) {
-        val oldColor = github.adizbek.themeable.ThemeManager.getStyle(forKey)
+        val oldColor = ThemeApplication.themeManager.getStyle(forKey)
 
         ColorPickerDialog.Builder(this)
             .setPreferenceName(null)
@@ -140,13 +141,13 @@ class ThemeActivity : AppCompatActivity(), ThemeListener {
     }
 
     override fun onPause() {
-        github.adizbek.themeable.ThemeManager.registerListener(this)
+        ThemeApplication.themeManager.removeListener(this)
 
         super.onPause()
     }
 
     override fun onResume() {
-        github.adizbek.themeable.ThemeManager.registerListener(this)
+        ThemeApplication.themeManager.registerListener(this)
 
         super.onResume()
     }

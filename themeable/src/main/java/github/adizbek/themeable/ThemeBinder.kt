@@ -65,7 +65,7 @@ class ThemeBinder(var view: View?, var flag: Flag?, var drawable: Drawable?, var
 
                         // TODO check later.
                         for (child in menu.children) {
-                            child.icon.apply {
+                            child.icon?.apply {
                                 setColorFilter(color, PorterDuff.Mode.MULTIPLY)
                                 invalidate()
                             }
