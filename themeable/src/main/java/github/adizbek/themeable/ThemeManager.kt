@@ -2,8 +2,6 @@ package github.adizbek.themeable
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.skydoves.colorpickerview.ColorPickerDialog
-import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import java.io.File
 
 class ThemeManager<T : ThemeInterface>(
