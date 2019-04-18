@@ -11,6 +11,8 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.skydoves.colorpickerview.ColorPickerDialog
+import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import github.adizbek.themeable.ThemeBinder
 import github.adizbek.themeable.ThemeListener
 import kotlinx.android.synthetic.main.activity_theme.*
