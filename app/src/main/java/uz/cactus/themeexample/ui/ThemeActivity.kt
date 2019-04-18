@@ -112,7 +112,29 @@ class ThemeActivity : AppCompatActivity(), ThemeListener {
     }
 
     private fun showColorPicker(forKey: String, callback: (color: Int) -> Unit) {
-        ThemeApplication.themeManager.provideColorPicker(forKey, this, callback)
+        val oldColor = ThemeApplication.themeManager.getStyle(forKey)
+
+        ColorPickerDialog.Builder(this)
+            .setPreferenceName(null)
+            .setTitle("ColorPicker Dialog")
+            .setPositiveButton("Pick",
+                ColorEnvelopeListener { envelope, fromUser ->
+                    callback(envelope.color)
+                })
+            .setNegativeButton("Cancel") { dialog, _ ->
+                callback(oldColor)
+                dialog.dismiss()
+            }
+            .attachAlphaSlideBar(true)
+            .attachBrightnessSlideBar(true)
+            .apply {
+                colorPickerView.setColorListener(ColorEnvelopeListener { envelope, fromUser ->
+                    callback(envelope.color)
+                })
+
+                colorPickerView.pureColor = oldColor
+            }
+            .show()
     }
 
     override fun onPause() {

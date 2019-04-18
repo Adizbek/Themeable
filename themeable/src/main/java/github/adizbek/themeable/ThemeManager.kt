@@ -162,32 +162,6 @@ class ThemeManager<T : ThemeInterface>(
 
         notifyListeners(theme)
     }
-
-    fun provideColorPicker(forKey: String, context: Context, callback: (color: Int) -> Unit) {
-        val oldColor = this.getStyle(forKey)
-
-        ColorPickerDialog.Builder(context)
-            .setPreferenceName(null)
-            .setTitle("ColorPicker Dialog")
-            .setPositiveButton("Pick",
-                ColorEnvelopeListener { envelope, fromUser ->
-                    callback(envelope.color)
-                })
-            .setNegativeButton("Cancel") { dialog, _ ->
-                callback(oldColor)
-                dialog.dismiss()
-            }
-            .attachAlphaSlideBar(true)
-            .attachBrightnessSlideBar(true)
-            .apply {
-                colorPickerView.setColorListener(ColorEnvelopeListener { envelope, fromUser ->
-                    callback(envelope.color)
-                })
-
-                colorPickerView.pureColor = oldColor
-            }
-            .show()
-    }
 }
 
 fun Context.getSettingsPreferences(): SharedPreferences {
