@@ -171,7 +171,10 @@ class DialogAdapter(var data: ArrayList<String>) : RecyclerView.Adapter<DialogAd
                 ThemeBinder(
                     name,
                     ThemeBinder.Flag.COLOR,
-                    Theme.KEY_DIALOG_LIST_TITLE_COLOR
+                    keyProvider = {
+                        return@ThemeBinder if (System.currentTimeMillis() % 2 == 0L) Theme.KEY_DIALOG_LIST_TITLE_COLOR
+                        else Theme.KEY_DIALOG_LIST_TEXT_COLOR
+                    }
                 ),
                 ThemeBinder(
                     text,

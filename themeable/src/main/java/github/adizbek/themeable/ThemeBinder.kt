@@ -10,8 +10,27 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 
-class ThemeBinder(var view: View?, var flag: Flag?, var drawable: Drawable?, var paint: Paint?, var key: String) {
+class ThemeBinder(
+    var view: View? = null,
+    var flag: Flag? = null,
+    var drawable: Drawable? = null,
+    var paint: Paint? = null,
+    private var key: String? = null,
+    private var keyProvider: (() -> String)? = null
+) {
     private var delegate: ((color: Int) -> Unit)? = null
+
+    fun getKey(): String {
+        key?.let {
+            return it
+        }
+
+        keyProvider?.let {
+            return it()
+        }
+
+        throw RuntimeException("Style not defined")
+    }
 
     constructor(view: View?, flag: Flag?, key: String, delegate: (color: Int) -> Unit) : this(
         view,

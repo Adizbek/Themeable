@@ -33,7 +33,7 @@ class ThemeManager<T : ThemeInterface>(
     private fun notifyListeners(key: String, color: Int) {
         for (listener in listeners) {
             for (bindStyle in listener.bindStyles()) {
-                if (bindStyle.key == key) {
+                if (bindStyle.getKey() == key) {
                     bindStyle.processColor(color)
 
                     listener.boundStyle(key, color)
@@ -55,8 +55,8 @@ class ThemeManager<T : ThemeInterface>(
 
         for (binder in themeListener.bindStyles()) {
 
-            if (styles.containsKey(binder.key)) {
-                binder.processColor(styles[binder.key]!!)
+            if (styles.containsKey(binder.getKey())) {
+                binder.processColor(styles[binder.getKey()]!!)
             }
 
         }
