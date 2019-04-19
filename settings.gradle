@@ -1,1 +1,2 @@
-include ':app', ':themeable'
+include ':app', ':themeable', ':colorpickerview'
+project(':colorpickerview').projectDir = new File('modules/color-picker/colorpickerview')

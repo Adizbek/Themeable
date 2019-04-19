@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import github.adizbek.themeable.ThemeBinder
+import github.adizbek.themeable.ThemeEditor
 import github.adizbek.themeable.ThemeListener
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -64,6 +65,8 @@ class MainActivity : AppCompatActivity(), ThemeListener {
         fab.setOnClickListener { view ->
             startActivity(Intent(this, ThemeActivity::class.java))
         }
+
+        ThemeEditor.activity = this
     }
 
 
