@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.github.dcendents.android-maven'
 
-group = 'com.github.Adizbek'
+group = 'com.github.adizbek.themeable'
 
 android {
     compileSdkVersion 28
