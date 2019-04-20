@@ -232,7 +232,7 @@ class ThemeManager<T : ThemeInterface>(
     override fun onActivityPaused(activity: Activity) {
         activies--
 
-        if(activies <= 0){
+        if (activies <= 0) {
             ThemeEditor.instance?.hide()
         }
     }
@@ -240,7 +240,7 @@ class ThemeManager<T : ThemeInterface>(
     override fun onActivityResumed(activity: Activity) {
         activies++
 
-        if (activity is AppCompatActivity){
+        if (activity is AppCompatActivity) {
             ThemeEditor.activity = activity
 
             ThemeEditor.instance?.show()

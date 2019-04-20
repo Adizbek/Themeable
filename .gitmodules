@@ -1,0 +1,3 @@
+[submodule "colorpicker"]
+	path = modules/colorpicker
+	url = https://github.com/Adizbek/ColorPickerView.git
