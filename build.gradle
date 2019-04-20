@@ -28,10 +28,10 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-//subprojects {
-//    //apply plugin: 'java'
+subprojects {
+    //apply plugin: 'java'
 //    apply plugin: 'maven'
-//
+
 //    sourceCompatibility = Version // java 8
 //    targetCompatibility = 1.8
 //
@@ -49,4 +49,4 @@ task clean(type: Delete) {
 //        archives sourcesJar
 //        archives javadocJar
 //    }
-//}
+}
