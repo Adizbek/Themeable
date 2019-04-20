@@ -1,6 +1,7 @@
 package github.adizbek.themeable
 
-import android.content.Context
+import android.app.Dialog
+import android.content.DialogInterface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -35,6 +36,30 @@ class ThemeStyleListDialogFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_style_list_dialog, container, false)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val d = super.onCreateDialog(savedInstanceState)
+
+        d?.window?.setDimAmount(0f)
+
+        return d
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        ThemeEditor.instance?.hide()
+        ThemeEditor.styleListDialogFragment = this
+    }
+
+
+    override fun onDismiss(dialog: DialogInterface?) {
+        super.onDismiss(dialog)
+
+        themeManager.saveCurrent()
+        ThemeEditor.styleListDialogFragment = null
+        ThemeEditor.instance?.show()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -8,8 +8,6 @@ import uz.cactus.themeexample.theme.Drawables
 import uz.cactus.themeexample.theme.Theme
 
 class ThemeApplication : Application() {
-
-
     override fun onCreate() {
         super.onCreate()
 
@@ -19,9 +17,18 @@ class ThemeApplication : Application() {
             fileExtension = "rchatheme"
         )
 
+        registerActivityLifecycleCallbacks(themeManager);
 
         Drawables.loadResources(themeManager, this)
     }
+
+    override fun onTerminate() {
+        super.onTerminate()
+
+        this.unregisterActivityLifecycleCallbacks(themeManager)
+    }
+
+
 
     companion object {
         lateinit var themeManager: ThemeManager<Theme>

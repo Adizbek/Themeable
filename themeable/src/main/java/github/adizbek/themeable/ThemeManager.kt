@@ -1,9 +1,13 @@
 package github.adizbek.themeable
 
+import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
+import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.skydoves.colorpickerview.ColorEnvelope
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
@@ -14,14 +18,16 @@ class ThemeManager<T : ThemeInterface>(
     var themeClass: Class<T>,
     val folder: File = context.getDir("themes", Context.MODE_PRIVATE),
     val fileExtension: String = "theme"
-) {
+) : Application.ActivityLifecycleCallbacks {
     var themes = ArrayList<T>()
     var selectedTheme: T? = null
+
+    var activies = 0
 
     var listeners = ArrayList<ThemeListener>()
 
     init {
-        ThemeEditor(context, this)
+        ThemeEditor(this)
 
         loadThemes()
         loadSavedTheme(context)
@@ -222,7 +228,43 @@ class ThemeManager<T : ThemeInterface>(
             }
             .show()
     }
+
+    override fun onActivityPaused(activity: Activity) {
+        activies--
+
+        if(activies <= 0){
+            ThemeEditor.instance?.hide()
+        }
+    }
+
+    override fun onActivityResumed(activity: Activity) {
+        activies++
+
+        if (activity is AppCompatActivity){
+            ThemeEditor.activity = activity
+
+            ThemeEditor.instance?.show()
+        }
+    }
+
+    override fun onActivityStarted(activity: Activity) {
+    }
+
+    override fun onActivityDestroyed(activity: Activity) {
+    }
+
+    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle?) {
+    }
+
+    override fun onActivityStopped(activity: Activity) {
+    }
+
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+
+    }
+
 }
+
 
 fun Context.getSettingsPreferences(): SharedPreferences {
     return this.getSharedPreferences("settings", Context.MODE_PRIVATE)
