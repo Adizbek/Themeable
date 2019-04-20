@@ -1,7 +1,14 @@
 package github.adizbek.themeable
 
+import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Resources
+import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import com.skydoves.colorpickerview.ColorEnvelope
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import java.io.File
@@ -11,13 +18,17 @@ class ThemeManager<T : ThemeInterface>(
     var themeClass: Class<T>,
     val folder: File = context.getDir("themes", Context.MODE_PRIVATE),
     val fileExtension: String = "theme"
-) {
+) : Application.ActivityLifecycleCallbacks {
     var themes = ArrayList<T>()
     var selectedTheme: T? = null
+
+    var activies = 0
 
     var listeners = ArrayList<ThemeListener>()
 
     init {
+        ThemeEditor(this)
+
         loadThemes()
         loadSavedTheme(context)
     }
@@ -163,33 +174,102 @@ class ThemeManager<T : ThemeInterface>(
         notifyListeners(theme)
     }
 
-    fun showColorPicker(forKey: String, context: Context, callback: (int: Int) -> Unit) {
-        val oldColor = getStyle(forKey)
+    fun showColorPicker(
+        forKey: String,
+        context: Context,
+        callback: (int: Int) -> Unit,
+        onDismiss: (() -> Unit)? = null,
+        onColorPickerStart: (() -> Unit)? = null,
+        onColorPickerEnd: (() -> Unit)? = null
+    ) {
+        var picker: AlertDialog? = null
 
-        ColorPickerDialog.Builder(context)
+        val oldColor = getStyle(forKey)
+        val listener = object : ColorEnvelopeListener {
+            override fun colorPickerStart() {
+                picker?.window?.setDimAmount(0f)
+                picker?.window?.decorView?.apply {
+                    alpha = 0.25f
+                }
+
+                onColorPickerStart?.invoke()
+            }
+
+            override fun colorPickerEnd() {
+                picker?.window?.setDimAmount(0.6f)
+                picker?.window?.decorView?.apply {
+                    alpha = 1f
+                }
+
+                onColorPickerEnd?.invoke()
+            }
+
+            override fun onColorSelected(envelope: ColorEnvelope, fromUser: Boolean) {
+                callback(envelope.color)
+            }
+        }
+
+        picker = ColorPickerDialog.Builder(context)
             .setPreferenceName(null)
             .setTitle("ColorPicker Dialog")
-            .setPositiveButton("Pick",
-                ColorEnvelopeListener { envelope, fromUser ->
-                    callback(envelope.color)
-                })
+            .setPositiveButton("Pick", listener)
             .setNegativeButton("Cancel") { dialog, _ ->
                 callback(oldColor)
                 dialog.dismiss()
             }
+            .setOnDismissListener {
+                onDismiss?.invoke()
+            }
             .attachAlphaSlideBar(true)
             .attachBrightnessSlideBar(true)
             .apply {
-                colorPickerView.setColorListener(ColorEnvelopeListener { envelope, fromUser ->
-                    callback(envelope.color)
-                })
-
+                colorPickerView.setColorListener(listener)
                 colorPickerView.pureColor = oldColor
             }
             .show()
     }
+
+    override fun onActivityPaused(activity: Activity) {
+        activies--
+
+        if(activies <= 0){
+            ThemeEditor.instance?.hide()
+        }
+    }
+
+    override fun onActivityResumed(activity: Activity) {
+        activies++
+
+        if (activity is AppCompatActivity){
+            ThemeEditor.activity = activity
+
+            ThemeEditor.instance?.show()
+        }
+    }
+
+    override fun onActivityStarted(activity: Activity) {
+    }
+
+    override fun onActivityDestroyed(activity: Activity) {
+    }
+
+    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle?) {
+    }
+
+    override fun onActivityStopped(activity: Activity) {
+    }
+
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+
+    }
+
 }
+
 
 fun Context.getSettingsPreferences(): SharedPreferences {
     return this.getSharedPreferences("settings", Context.MODE_PRIVATE)
 }
+
+fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
+
+fun Int.toDp(): Int = (this / Resources.getSystem().displayMetrics.density).toInt()
