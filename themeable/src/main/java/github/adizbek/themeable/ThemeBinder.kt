@@ -101,8 +101,10 @@ class ThemeBinder(
                 }
             }
 
-            if (Flag.BACKGROUND_COLOR == flag) {
-                view?.setBackgroundColor(color)
+            flag?.apply {
+                if (contains(Flag.BACKGROUND_COLOR)) {
+                    view?.setBackgroundColor(color)
+                }
             }
 
             view?.invalidate()
