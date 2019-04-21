@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity(), ThemeListener {
             ThemeBinder(
                 fab,
                 ThemeBinder.Flag.BACKGROUND_COLOR,
-                Theme.KEY_STATUS_BAR_COLOR
+                key = Theme.KEY_STATUS_BAR_COLOR
             ),
             ThemeBinder(key = Theme.KEY_STATUS_BAR_COLOR) { color ->
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

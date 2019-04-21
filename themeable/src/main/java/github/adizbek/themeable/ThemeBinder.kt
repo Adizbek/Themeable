@@ -94,7 +94,7 @@ class ThemeBinder(
 
                         if (contains(Flag.COMPOUND_ICON)) {
                             compoundDrawables.forEach {
-                                it?.invalidateSelf()
+                                it?.setColorFilter(color, PorterDuff.Mode.MULTIPLY)
                             }
                         }
                     }
