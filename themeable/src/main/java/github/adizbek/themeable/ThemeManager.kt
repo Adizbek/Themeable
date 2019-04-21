@@ -7,7 +7,7 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.skydoves.colorpickerview.ColorEnvelope
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
@@ -22,13 +22,17 @@ class ThemeManager<T : ThemeInterface>(
     var themes = ArrayList<T>()
     var selectedTheme: T? = null
 
-    var activies = 0
+    var activities = 0
+    var themeEditor = ThemeEditor(this, context)
+    var enableEdit = false
 
-    var listeners = ArrayList<ThemeListener>()
+    var styleList: ThemeStyleListDialogFragment? = null
+    val styleListShown: Boolean
+        get() = styleList != null
+
+    private var listeners = ArrayList<ThemeListener>()
 
     init {
-        ThemeEditor(this)
-
         loadThemes()
         loadSavedTheme(context)
     }
@@ -230,20 +234,20 @@ class ThemeManager<T : ThemeInterface>(
     }
 
     override fun onActivityPaused(activity: Activity) {
-        activies--
+        activities--
 
-        if (activies <= 0) {
-            ThemeEditor.instance?.hide()
+        if (activities <= 0) {
+            themeEditor.hide()
         }
     }
 
     override fun onActivityResumed(activity: Activity) {
-        activies++
+        activities++
 
-        if (activity is AppCompatActivity) {
+        if (activity is FragmentActivity && enableEdit) {
             ThemeEditor.activity = activity
 
-            ThemeEditor.instance?.show()
+            themeEditor.show()
         }
     }
 
@@ -263,8 +267,23 @@ class ThemeManager<T : ThemeInterface>(
 
     }
 
-}
+    fun showThemeEditor() {
+        enableEdit = true
+        themeEditor.show()
+    }
 
+    fun hideThemeEditor() {
+        enableEdit = false
+        themeEditor.hide()
+    }
+
+    fun toggleThemeEditor() {
+        if (enableEdit)
+            hideThemeEditor()
+        else
+            showThemeEditor()
+    }
+}
 
 fun Context.getSettingsPreferences(): SharedPreferences {
     return this.getSharedPreferences("settings", Context.MODE_PRIVATE)

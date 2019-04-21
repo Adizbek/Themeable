@@ -38,16 +38,16 @@ object Drawables : ThemeListener {
     override fun bindStyles(): Array<ThemeBinder> {
         return arrayOf(
             ThemeBinder(
-                saveIcon,
-                Theme.KEY_STATUS_BAR_COLOR
+                drawable = saveIcon,
+                key = Theme.KEY_STATUS_BAR_COLOR
             ),
             ThemeBinder(
-                addIcon,
-                Theme.KEY_STATUS_BAR_COLOR
+                drawable = addIcon,
+                key = Theme.KEY_STATUS_BAR_COLOR
             ),
             ThemeBinder(
-                personIcon,
-                Theme.KEY_DIALOG_LIST_ICON
+                drawable = personIcon,
+                key = Theme.KEY_DIALOG_LIST_ICON
             )
         )
     }

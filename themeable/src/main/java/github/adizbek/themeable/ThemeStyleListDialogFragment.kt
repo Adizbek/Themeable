@@ -15,19 +15,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_style_list_dialog.*
 import kotlinx.android.synthetic.main.fragment_style_list_dialog_item.view.*
 
-const val ARG_THEME_MANAGER = "theme_manager"
-
-/**
- *
- * A fragment that shows a list of items as a modal bottom sheet.
- *
- * You can show this modal bottom sheet from your activity like this:
- * <pre>
- *    ThemeStyleListDialogFragment.newInstance(30).show(supportFragmentManager, "dialog")
- * </pre>
- *
- * You activity (or fragment) needs to implement [ThemeStyleListDialogFragment.Listener].
- */
 class ThemeStyleListDialogFragment : BottomSheetDialogFragment() {
     private lateinit var themeManager: ThemeManager<*>
 
@@ -39,18 +26,16 @@ class ThemeStyleListDialogFragment : BottomSheetDialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val d = super.onCreateDialog(savedInstanceState)
-
-        d?.window?.setDimAmount(0f)
-
-        return d
+        return super.onCreateDialog(savedInstanceState).apply {
+            window?.setDimAmount(0f)
+        }
     }
 
     override fun onStart() {
         super.onStart()
 
-        ThemeEditor.instance?.hide()
-        ThemeEditor.styleListDialogFragment = this
+        themeManager.hideThemeEditor()
+        themeManager.styleList = this
     }
 
 
@@ -58,8 +43,8 @@ class ThemeStyleListDialogFragment : BottomSheetDialogFragment() {
         super.onDismiss(dialog)
 
         themeManager.saveCurrent()
-        ThemeEditor.styleListDialogFragment = null
-        ThemeEditor.instance?.show()
+        themeManager.styleList = null
+        themeManager.showThemeEditor()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

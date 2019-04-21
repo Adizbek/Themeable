@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity(), ThemeListener {
                 ThemeBinder.Flag.BACKGROUND_COLOR,
                 Theme.KEY_STATUS_BAR_COLOR
             ),
-            ThemeBinder(Theme.KEY_STATUS_BAR_COLOR) { color ->
+            ThemeBinder(key = Theme.KEY_STATUS_BAR_COLOR) { color ->
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     window.statusBarColor = color
                 }
@@ -180,6 +180,9 @@ class DialogAdapter(var data: ArrayList<String>) : RecyclerView.Adapter<DialogAd
                     text,
                     ThemeBinder.Flag.COLOR,
                     Theme.KEY_DIALOG_LIST_TEXT_COLOR
+                ),
+                ThemeBinder(
+                    name, ThemeBinder.Flag.COMPOUND_ICON, key = Theme.KEY_DIALOG_LIST_ICON
                 )
             )
         }

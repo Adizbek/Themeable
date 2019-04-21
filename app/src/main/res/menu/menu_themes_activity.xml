@@ -2,6 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+    <item
+            android:icon="@drawable/ic_palette_white_24dp"
+            android:title="Edit theme"
+            app:showAsAction="always"
+            android:id="@+id/menu_action_edit_theme"/>
+
     <item
             android:icon="@drawable/ic_save_white_24dp"
             android:title="Save theme"

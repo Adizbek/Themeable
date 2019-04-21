@@ -15,6 +15,7 @@ import github.adizbek.themeable.ThemeBinder
 import github.adizbek.themeable.ThemeListener
 import kotlinx.android.synthetic.main.activity_theme.*
 import uz.cactus.themeexample.R
+import uz.cactus.themeexample.R.id.*
 import uz.cactus.themeexample.ThemeApplication
 import uz.cactus.themeexample.theme.Theme
 import uz.cactus.themeexample.toast
@@ -33,11 +34,7 @@ class ThemeActivity : AppCompatActivity(), ThemeListener {
                 ThemeBinder.Flag.BACKGROUND_COLOR,
                 Theme.KEY_ACTION_BAR_BACKGROUND_COLOR
             ),
-            ThemeBinder(
-                null,
-                null,
-                Theme.KEY_STATUS_BAR_COLOR
-            ) { color ->
+            ThemeBinder(key = Theme.KEY_STATUS_BAR_COLOR) { color ->
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     window.statusBarColor = color
                 }
@@ -67,13 +64,17 @@ class ThemeActivity : AppCompatActivity(), ThemeListener {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
 
         when (item?.itemId) {
-            uz.cactus.themeexample.R.id.menu_action_select_theme -> {
+            menu_action_select_theme -> {
                 showThemesList()
             }
 
-            uz.cactus.themeexample.R.id.menu_action_save_theme -> {
+            menu_action_save_theme -> {
                 ThemeApplication.themeManager.saveCurrent()
                 toast(this, "Theme saved")
+            }
+
+            menu_action_edit_theme -> {
+                ThemeApplication.themeManager.toggleThemeEditor()
             }
         }
 

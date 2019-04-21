@@ -36,11 +36,7 @@ class ThemeListActivity : AppCompatActivity(), ThemeListener {
                 Theme.KEY_ACTION_BAR_BACKGROUND_COLOR
             ),
 
-            ThemeBinder(
-                null,
-                null,
-                Theme.KEY_STATUS_BAR_COLOR
-            ) { color ->
+            ThemeBinder(key = Theme.KEY_STATUS_BAR_COLOR) { color ->
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     window.statusBarColor = color
                 }

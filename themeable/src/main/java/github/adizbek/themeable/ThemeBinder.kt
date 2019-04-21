@@ -12,13 +12,22 @@ import androidx.core.view.children
 
 class ThemeBinder(
     var view: View? = null,
-    var flag: Flag? = null,
+    var flag: Array<Flag>? = null,
     var drawable: Drawable? = null,
     var paint: Paint? = null,
     private var key: String? = null,
-    private var keyProvider: (() -> String)? = null
-) {
+    private var keyProvider: (() -> String)? = null,
     private var delegate: ((color: Int) -> Unit)? = null
+
+) {
+    constructor(view: View, flag: Flag, key: String) : this(view, flag = arrayOf(flag), key = key)
+
+    constructor(view: View, flag: Flag, keyProvider: (() -> String)) : this(
+        view,
+        arrayOf(flag),
+        keyProvider = keyProvider
+    )
+
 
     fun getKey(): String {
         key?.let {
@@ -32,34 +41,10 @@ class ThemeBinder(
         throw RuntimeException("Style not defined")
     }
 
-    constructor(view: View?, flag: Flag?, key: String, delegate: (color: Int) -> Unit) : this(
-        view,
-        flag,
-        null,
-        null,
-        key
-    ) {
-        this.delegate = delegate
-    }
-
-    constructor(key: String, delegate: (color: Int) -> Unit) : this(
-        null,
-        null,
-        null,
-        null,
-        key
-    ) {
-        this.delegate = delegate
-    }
-
-    constructor(drawable: Drawable, key: String) : this(null, null, drawable, null, key)
-    constructor(paint: Paint, key: String) : this(null, null, null, paint, key)
-
-    constructor(view: View?, flag: Flag, key: String) : this(view, flag, null, null, key)
-
 
     enum class Flag {
         COLOR,
+        COMPOUND_ICON,
         BACKGROUND_COLOR
     }
 
@@ -79,26 +64,39 @@ class ThemeBinder(
         if (view != null) {
             if (view is Toolbar) {
                 (view as Toolbar).apply {
-                    if (flag == Flag.COLOR) {
-                        setTitleTextColor(color)
+                    flag?.apply {
+                        if (contains(Flag.COLOR)) {
+                            setTitleTextColor(color)
 
-                        // TODO check later.
-                        for (child in menu.children) {
-                            child.icon?.apply {
-                                setColorFilter(color, PorterDuff.Mode.MULTIPLY)
-                                invalidate()
+                            // TODO check later.
+                            for (child in menu.children) {
+                                child.icon?.apply {
+                                    setColorFilter(color, PorterDuff.Mode.MULTIPLY)
+                                    invalidate()
+                                }
                             }
+
                         }
 
-                    } else if (flag == Flag.BACKGROUND_COLOR) {
-                        setBackgroundDrawable(ColorDrawable(color))
+                        if (contains(Flag.BACKGROUND_COLOR)) {
+                            setBackgroundDrawable(ColorDrawable(color))
+                        }
                     }
                 }
 
             } else if (view is TextView) {
                 (view as TextView).apply {
-                    if (Flag.COLOR == flag) {
-                        setTextColor(color)
+
+                    flag?.apply {
+                        if (contains(Flag.COLOR)) {
+                            setTextColor(color)
+                        }
+
+                        if (contains(Flag.COMPOUND_ICON)) {
+                            compoundDrawables.forEach {
+                                it?.invalidateSelf()
+                            }
+                        }
                     }
                 }
             }
@@ -106,6 +104,8 @@ class ThemeBinder(
             if (Flag.BACKGROUND_COLOR == flag) {
                 view?.setBackgroundColor(color)
             }
+
+            view?.invalidate()
         }
 
         delegate?.let {
