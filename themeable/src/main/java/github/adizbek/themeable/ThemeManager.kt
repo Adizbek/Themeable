@@ -244,10 +244,13 @@ class ThemeManager<T : ThemeInterface>(
     override fun onActivityResumed(activity: Activity) {
         activities++
 
-        if (activity is FragmentActivity && enableEdit) {
+        if (activity is FragmentActivity) {
             ThemeEditor.activity = activity
 
-            themeEditor.show()
+            if(enableEdit){
+                themeEditor.show()
+            }
+            
         }
     }
 
