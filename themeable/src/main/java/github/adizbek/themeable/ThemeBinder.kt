@@ -101,7 +101,7 @@ class ThemeBinder(
                 }
             }
 
-            if (Flag.BACKGROUND_COLOR == flag) {
+            if (flag?.contains(Flag.BACKGROUND_COLOR)) {
                 view?.setBackgroundColor(color)
             }
 
