@@ -28,7 +28,7 @@ dependencies {
 
 ## HOW TO USE
 First create our theme. Theme.java
-```java
+```kotlin
 class Theme(val name: String, val manager: ThemeManager<Theme>) : ThemeInterface(name, manager) {
     // default values for styles
     override val themeValues: HashMap<String, Int>
@@ -94,7 +94,7 @@ object Drawables : ThemeListener {
 
 Setup theme manager in our application
 
-```java
+```kotlin
 class ThemeApplication : Application() {
     override fun onCreate() {
         super.onCreate()
@@ -124,7 +124,7 @@ class ThemeApplication : Application() {
 ```
 
 ## HOW TO USE IN ACTIVITY
-```java
+```kotlin
 class MainActivity : AppCompatActivity(), ThemeListener {
     
     //bind our style to views
@@ -200,7 +200,7 @@ your app and has internal theme editor.
 
 #### Ways of style binding 
 
-```java
+```kotlin
 ThemeBinder( // binds key to view's text color
     view,
     ThemeBinder.Flag.COLOR,
